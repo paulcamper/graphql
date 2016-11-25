@@ -3,11 +3,14 @@ package graphql
 import (
 	"errors"
 	"fmt"
+	"github.com/bugsnag/bugsnag-go"
+	bugsnagErr "github.com/bugsnag/bugsnag-go/errors"
+	"log"
 	"reflect"
 	"strings"
 
-	"github.com/graphql-go/graphql/gqlerrors"
-	"github.com/graphql-go/graphql/language/ast"
+	"github.com/paulcamper/graphql/gqlerrors"
+	"github.com/paulcamper/graphql/language/ast"
 	"golang.org/x/net/context"
 )
 
@@ -44,10 +47,9 @@ func Execute(p ExecuteParams) (result *Result) {
 
 	defer func() {
 		if r := recover(); r != nil {
-			var err error
-			if r, ok := r.(error); ok {
-				err = gqlerrors.FormatError(r)
-			}
+			err := bugsnagErr.New(err, 1)
+			bugsnag.Notify(err)
+			log.Println("execute failed:", err, string(err.Stack()))
 			exeContext.Errors = append(exeContext.Errors, gqlerrors.FormatError(err))
 			result.Errors = exeContext.Errors
 		}
@@ -488,6 +490,9 @@ func resolveField(eCtx *ExecutionContext, parentType *Object, source interface{}
 					FieldASTsToNodeASTs(fieldASTs),
 				)
 			}
+			berr := bugsnagErr.New(r, 2)
+			bugsnag.Notify(berr)
+			log.Println("resolve failed:", berr.Error(), string(berr.Stack()))
 			if r, ok := r.(error); ok {
 				err = gqlerrors.FormatError(r)
 			}
@@ -557,6 +562,9 @@ func completeValueCatchingError(eCtx *ExecutionContext, returnType Type, fieldAS
 	defer func() interface{} {
 		if r := recover(); r != nil {
 			//send panic upstream
+			berr := bugsnagErr.New(r, 2)
+			bugsnag.Notify(berr)
+			log.Println("complete value failed:", berr.Error(), string(berr.Stack()))
 			if _, ok := returnType.(*NonNull); ok {
 				panic(r)
 			}

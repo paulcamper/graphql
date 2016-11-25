@@ -3,11 +3,11 @@ package testutil
 import (
 	"testing"
 
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/gqlerrors"
-	"github.com/graphql-go/graphql/language/location"
-	"github.com/graphql-go/graphql/language/parser"
-	"github.com/graphql-go/graphql/language/source"
+	"github.com/paulcamper/graphql"
+	"github.com/paulcamper/graphql/gqlerrors"
+	"github.com/paulcamper/graphql/language/location"
+	"github.com/paulcamper/graphql/language/parser"
+	"github.com/paulcamper/graphql/language/source"
 	"reflect"
 )
 

@@ -2,11 +2,11 @@ package graphql
 
 import (
 	"fmt"
-	"github.com/graphql-go/graphql/gqlerrors"
-	"github.com/graphql-go/graphql/language/ast"
-	"github.com/graphql-go/graphql/language/kinds"
-	"github.com/graphql-go/graphql/language/printer"
-	"github.com/graphql-go/graphql/language/visitor"
+	"github.com/paulcamper/graphql/gqlerrors"
+	"github.com/paulcamper/graphql/language/ast"
+	"github.com/paulcamper/graphql/language/kinds"
+	"github.com/paulcamper/graphql/language/printer"
+	"github.com/paulcamper/graphql/language/visitor"
 	"sort"
 	"strings"
 )
